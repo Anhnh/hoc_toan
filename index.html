@@ -436,6 +436,9 @@
                     }
                 }
                 
+                // Debug: Log some questions to check
+                console.log('Sample questions:', questions.slice(0, 10));
+                
                 // Trộn ngẫu nhiên các câu hỏi
                 return this.shuffleArray(questions);
             }
@@ -506,7 +509,11 @@
                 // Generate answer options
                 this.generateAnswerOptions(question.answer);
                 
-                // Reset UI
+                // Reset UI - Clear all answer option classes
+                this.answerOptions.querySelectorAll('.answer-option').forEach(option => {
+                    option.className = 'answer-option';
+                });
+                
                 this.feedback.textContent = '';
                 this.feedback.className = 'feedback';
                 this.isAnswered = false;
@@ -603,7 +610,14 @@
             checkAnswer() {
                 if (this.isAnswered || !this.selectedAnswer) return;
                 
-                const correctAnswer = this.questions[this.currentQuestionIndex].answer;
+                const currentQuestion = this.questions[this.currentQuestionIndex];
+                const correctAnswer = currentQuestion.answer;
+                
+                // Debug: Log current question and answers
+                console.log('Current question:', currentQuestion.question);
+                console.log('Correct answer:', correctAnswer);
+                console.log('Selected answer:', this.selectedAnswer);
+                console.log('Answer options:', Array.from(this.answerOptions.querySelectorAll('.answer-option')).map(opt => opt.dataset.answer));
                 
                 this.isAnswered = true;
                 clearInterval(this.timer);
