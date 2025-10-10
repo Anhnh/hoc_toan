@@ -329,6 +329,34 @@
             transform: translateY(0);
         }
 
+        .sound-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sound-toggle:hover { 
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .sound-toggle.muted {
+            background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);
+        }
+
         @media (max-width: 768px) {
             .game-container {
                 padding: 20px;
@@ -349,6 +377,7 @@
 </head>
 <body>
     <div class="game-container">
+        <button class="sound-toggle" id="sound-toggle" title="Bật/Tắt âm thanh">🔊</button>
         <h1 class="game-title">🎮 Flashcard Toán Học 🎮</h1>
         
         <div class="score-board">
@@ -399,9 +428,12 @@
                 this.timeLeft = 10;
                 this.isAnswered = false;
                 this.autoAdvanceTimer = null;
+                this.soundEnabled = true;
+                this.audioContext = null;
                 
                 this.initializeElements();
                 this.bindEvents();
+                this.initializeAudio();
                 this.startGame();
             }
 
@@ -465,11 +497,13 @@
                 this.gameOver = document.getElementById('game-over');
                 this.finalScore = document.getElementById('final-score');
                 this.celebration = document.getElementById('celebration');
+                this.soundToggle = document.getElementById('sound-toggle');
                 this.selectedAnswer = null;
             }
 
             bindEvents() {
                 this.restartBtn.addEventListener('click', () => this.restartGame());
+                this.soundToggle.addEventListener('click', () => this.toggleSound());
                 
                 // Add click events to answer options
                 this.answerOptions.addEventListener('click', (e) => {
@@ -490,6 +524,71 @@
                         }
                     }
                 });
+            }
+
+            initializeAudio() {
+                try {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    console.log('Web Audio API not supported');
+                    this.soundEnabled = false;
+                    this.soundToggle.style.display = 'none';
+                }
+            }
+
+            toggleSound() {
+                this.soundEnabled = !this.soundEnabled;
+                this.soundToggle.textContent = this.soundEnabled ? '🔊' : '🔇';
+                this.soundToggle.classList.toggle('muted', !this.soundEnabled);
+                
+                if (this.soundEnabled && this.audioContext && this.audioContext.state === 'suspended') {
+                    this.audioContext.resume();
+                }
+            }
+
+            playSound(frequency, duration, type = 'sine') {
+                if (!this.soundEnabled || !this.audioContext) return;
+                
+                try {
+                    const oscillator = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
+                    oscillator.type = type;
+                    
+                    gainNode.gain.setValueAtTime(0.1, this.audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
+                    
+                    oscillator.start(this.audioContext.currentTime);
+                    oscillator.stop(this.audioContext.currentTime + duration);
+                } catch (e) {
+                    console.log('Error playing sound:', e);
+                }
+            }
+
+            playCorrectSound() {
+                // Happy ascending melody
+                this.playSound(523, 0.1, 'sine'); // C5
+                setTimeout(() => this.playSound(659, 0.1, 'sine'), 100); // E5
+                setTimeout(() => this.playSound(784, 0.2, 'sine'), 200); // G5
+            }
+
+            playIncorrectSound() {
+                // Gentle descending tone
+                this.playSound(400, 0.3, 'sawtooth');
+            }
+
+            playTimeUpSound() {
+                // Warning sound
+                this.playSound(200, 0.5, 'square');
+            }
+
+            playSelectSound() {
+                // Soft click
+                this.playSound(800, 0.05, 'sine');
             }
 
             startGame() {
@@ -574,6 +673,9 @@
                 optionElement.classList.add('selected');
                 this.selectedAnswer = parseInt(optionElement.dataset.answer);
                 
+                // Play select sound
+                this.playSelectSound();
+                
                 // Auto check answer after selection
                 setTimeout(() => {
                     this.checkAnswer();
@@ -646,6 +748,7 @@
                 
                 this.isAnswered = true;
                 clearInterval(this.timer);
+                this.playTimeUpSound();
                 this.handleIncorrectAnswer(this.questions[this.currentQuestionIndex].answer);
                 this.autoAdvance();
             }
@@ -656,6 +759,9 @@
                 this.feedback.classList.add('correct');
                 this.correctCountElement.textContent = this.correctCount;
                 
+                // Play correct sound
+                this.playCorrectSound();
+                
                 // Celebration effect
                 this.createConfetti();
             }
@@ -665,6 +771,9 @@
                 this.feedback.textContent = `❌ Sai rồi! Đáp án đúng là: ${correctAnswer}`;
                 this.feedback.classList.add('incorrect');
                 this.incorrectCountElement.textContent = this.incorrectCount;
+                
+                // Play incorrect sound
+                this.playIncorrectSound();
             }
 
             autoAdvance() {
