@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Trò Chơi Flashcard Toán Học - Lớp 2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-title {
+            color: #4a5568;
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .score {
+            color: #2d3748;
+            background: #e2e8f0;
+            padding: 10px 20px;
+            border-radius: 15px;
+            min-width: 80px;
+        }
+
+        .timer-container {
+            margin-bottom: 20px;
+        }
+
+        .timer {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e53e3e;
+            background: #fed7d7;
+            padding: 10px 20px;
+            border-radius: 15px;
+            display: inline-block;
+            min-width: 80px;
+            transition: all 0.3s ease;
+        }
+
+        .timer.warning {
+            background: #feb2b2;
+            animation: pulse 1s infinite;
+        }
+
+        .timer.danger {
+            background: #fc8181;
+            animation: shake 0.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .question-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            transform: scale(1);
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .question-card.flip {
+            animation: flipCard 0.6s ease-in-out;
+        }
+
+        @keyframes flipCard {
+            0% { transform: rotateY(0deg) scale(1); }
+            50% { transform: rotateY(90deg) scale(0.9); }
+            100% { transform: rotateY(0deg) scale(1); }
+        }
+
+        .question-text {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .answer-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .answer-option {
+            font-size: 24px;
+            font-weight: bold;
+            padding: 20px;
+            border: 3px solid #e2e8f0;
+            border-radius: 15px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none;
+            text-align: center;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .answer-option:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .answer-option:active {
+            transform: translateY(0);
+        }
+
+        .answer-option.selected {
+            border-color: #667eea;
+            background: #e6f3ff;
+            transform: scale(1.05);
+        }
+
+        .answer-option.correct {
+            border-color: #48bb78;
+            background: #c6f6d5;
+            animation: correctAnswer 0.5s ease;
+        }
+
+        .answer-option.incorrect {
+            border-color: #f56565;
+            background: #fed7d7;
+            animation: incorrectAnswer 0.5s ease;
+        }
+
+        @keyframes correctAnswer {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes incorrectAnswer {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-check {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+        }
+
+        .btn-skip {
+            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+            color: white;
+        }
+
+        .btn-restart {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .feedback {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback.correct {
+            color: #22543d;
+            background: #c6f6d5;
+        }
+
+        .feedback.incorrect {
+            color: #742a2a;
+            background: #fed7d7;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78 0%, #38a169 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #f093fb;
+            animation: confettiFall 3s linear infinite;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .game-over {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .game-over-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .game-over h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .final-score {
+            font-size: 24px;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .question-text {
+                font-size: 36px;
+            }
+            
+            .answer-option {
+                font-size: 20px;
+                padding: 15px;
+                min-height: 50px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1 class="game-title">🎮 Flashcard Toán Học 🎮</h1>
+        
+        <div class="score-board">
+            <div class="score">✅ Đúng: <span id="correct-count">0</span></div>
+            <div class="score">❌ Sai: <span id="incorrect-count">0</span></div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+
+        <div class="timer-container">
+            <div class="timer" id="timer">10</div>
+        </div>
+
+        <div class="question-card" id="question-card">
+            <div class="question-text" id="question-text">7 + 3 = ?</div>
+            <div class="answer-options" id="answer-options">
+                <div class="answer-option" data-answer="10">10</div>
+                <div class="answer-option" data-answer="11">11</div>
+                <div class="answer-option" data-answer="9">9</div>
+                <div class="answer-option" data-answer="12">12</div>
+            </div>
+            <div class="buttons">
+                <button class="btn btn-check" id="check-btn">Kiểm tra</button>
+                <button class="btn btn-skip" id="skip-btn">Bỏ qua</button>
+            </div>
+            <div class="feedback" id="feedback"></div>
+        </div>
+
+        <button class="btn btn-restart" id="restart-btn" style="display: none;">Chơi lại</button>
+    </div>
+
+    <div class="celebration" id="celebration"></div>
+
+    <div class="game-over" id="game-over" style="display: none;">
+        <div class="game-over-content">
+            <h2>🎉 Hoàn thành! 🎉</h2>
+            <div class="final-score" id="final-score">Điểm: 0/0</div>
+            <button class="btn btn-restart" onclick="restartGame()">Chơi lại</button>
+        </div>
+    </div>
+
+    <script>
+        class FlashcardGame {
+            constructor() {
+                this.questions = this.generateQuestions();
+                this.currentQuestionIndex = 0;
+                this.correctCount = 0;
+                this.incorrectCount = 0;
+                this.timer = null;
+                this.timeLeft = 10;
+                this.isAnswered = false;
+                this.autoAdvanceTimer = null;
+                
+                this.initializeElements();
+                this.bindEvents();
+                this.startGame();
+            }
+
+            generateQuestions() {
+                const questions = [];
+                
+                // Phép cộng với tổng từ 7 trở lên
+                for (let a = 0; a <= 20; a++) {
+                    for (let b = 0; b <= 20; b++) {
+                        const sum = a + b;
+                        if (sum >= 7 && sum <= 20) {
+                            questions.push({
+                                question: `${a} + ${b} = ?`,
+                                answer: sum,
+                                type: 'addition'
+                            });
+                        }
+                    }
+                }
+                
+                // Phép trừ với số bị trừ từ 6 trở lên
+                for (let a = 6; a <= 20; a++) {
+                    for (let b = 0; b <= a; b++) {
+                        const result = a - b;
+                        if (result >= 0) {
+                            questions.push({
+                                question: `${a} - ${b} = ?`,
+                                answer: result,
+                                type: 'subtraction'
+                            });
+                        }
+                    }
+                }
+                
+                // Trộn ngẫu nhiên các câu hỏi
+                return this.shuffleArray(questions);
+            }
+
+            shuffleArray(array) {
+                const shuffled = [...array];
+                for (let i = shuffled.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                }
+                return shuffled;
+            }
+
+            initializeElements() {
+                this.questionText = document.getElementById('question-text');
+                this.answerOptions = document.getElementById('answer-options');
+                this.checkBtn = document.getElementById('check-btn');
+                this.skipBtn = document.getElementById('skip-btn');
+                this.restartBtn = document.getElementById('restart-btn');
+                this.feedback = document.getElementById('feedback');
+                this.timerElement = document.getElementById('timer');
+                this.questionCard = document.getElementById('question-card');
+                this.correctCountElement = document.getElementById('correct-count');
+                this.incorrectCountElement = document.getElementById('incorrect-count');
+                this.progressFill = document.getElementById('progress-fill');
+                this.gameOver = document.getElementById('game-over');
+                this.finalScore = document.getElementById('final-score');
+                this.celebration = document.getElementById('celebration');
+                this.selectedAnswer = null;
+            }
+
+            bindEvents() {
+                this.checkBtn.addEventListener('click', () => this.checkAnswer());
+                this.skipBtn.addEventListener('click', () => this.skipQuestion());
+                this.restartBtn.addEventListener('click', () => this.restartGame());
+                
+                // Add click events to answer options
+                this.answerOptions.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('answer-option') && !this.isAnswered) {
+                        this.selectAnswer(e.target);
+                    }
+                });
+
+                // Keyboard support
+                document.addEventListener('keydown', (e) => {
+                    if (this.isAnswered) return;
+                    
+                    if (e.key >= '1' && e.key <= '4') {
+                        const optionIndex = parseInt(e.key) - 1;
+                        const options = this.answerOptions.querySelectorAll('.answer-option');
+                        if (options[optionIndex]) {
+                            this.selectAnswer(options[optionIndex]);
+                        }
+                    } else if (e.key === 'Enter' && this.selectedAnswer) {
+                        this.checkAnswer();
+                    }
+                });
+            }
+
+            startGame() {
+                this.showQuestion();
+                this.startTimer();
+            }
+
+            showQuestion() {
+                if (this.currentQuestionIndex >= this.questions.length) {
+                    this.endGame();
+                    return;
+                }
+
+                const question = this.questions[this.currentQuestionIndex];
+                this.questionText.textContent = question.question;
+                
+                // Generate answer options
+                this.generateAnswerOptions(question.answer);
+                
+                // Reset UI
+                this.feedback.textContent = '';
+                this.feedback.className = 'feedback';
+                this.isAnswered = false;
+                this.selectedAnswer = null;
+                this.timeLeft = 10;
+                this.updateTimer();
+                this.updateProgress();
+
+                // Add flip animation
+                this.questionCard.classList.add('flip');
+                setTimeout(() => {
+                    this.questionCard.classList.remove('flip');
+                }, 600);
+            }
+
+            generateAnswerOptions(correctAnswer) {
+                const options = [];
+                options.push(correctAnswer);
+                
+                // Generate 3 wrong answers
+                while (options.length < 4) {
+                    let wrongAnswer;
+                    if (Math.random() < 0.5) {
+                        // Generate answer close to correct one
+                        wrongAnswer = correctAnswer + Math.floor(Math.random() * 6) - 3;
+                    } else {
+                        // Generate random answer in reasonable range
+                        wrongAnswer = Math.floor(Math.random() * 21);
+                    }
+                    
+                    if (wrongAnswer >= 0 && wrongAnswer <= 20 && !options.includes(wrongAnswer)) {
+                        options.push(wrongAnswer);
+                    }
+                }
+                
+                // Shuffle options
+                for (let i = options.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [options[i], options[j]] = [options[j], options[i]];
+                }
+                
+                // Update DOM
+                const optionElements = this.answerOptions.querySelectorAll('.answer-option');
+                optionElements.forEach((element, index) => {
+                    element.textContent = options[index];
+                    element.dataset.answer = options[index];
+                    element.className = 'answer-option';
+                });
+            }
+
+            selectAnswer(optionElement) {
+                // Remove previous selection
+                this.answerOptions.querySelectorAll('.answer-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                
+                // Add selection to clicked option
+                optionElement.classList.add('selected');
+                this.selectedAnswer = parseInt(optionElement.dataset.answer);
+            }
+
+            startTimer() {
+                this.timer = setInterval(() => {
+                    this.timeLeft--;
+                    this.updateTimer();
+                    
+                    if (this.timeLeft <= 0 && !this.isAnswered) {
+                        this.timeUp();
+                    }
+                }, 1000);
+            }
+
+            updateTimer() {
+                this.timerElement.textContent = this.timeLeft;
+                this.timerElement.className = 'timer';
+                
+                if (this.timeLeft <= 3) {
+                    this.timerElement.classList.add('danger');
+                } else if (this.timeLeft <= 5) {
+                    this.timerElement.classList.add('warning');
+                }
+            }
+
+            updateProgress() {
+                const progress = ((this.currentQuestionIndex + 1) / this.questions.length) * 100;
+                this.progressFill.style.width = `${progress}%`;
+            }
+
+            checkAnswer() {
+                if (this.isAnswered || !this.selectedAnswer) return;
+                
+                const correctAnswer = this.questions[this.currentQuestionIndex].answer;
+                
+                this.isAnswered = true;
+                clearInterval(this.timer);
+                
+                // Highlight correct and incorrect answers
+                this.answerOptions.querySelectorAll('.answer-option').forEach(option => {
+                    const answer = parseInt(option.dataset.answer);
+                    if (answer === correctAnswer) {
+                        option.classList.add('correct');
+                    } else if (answer === this.selectedAnswer) {
+                        option.classList.add('incorrect');
+                    }
+                });
+                
+                if (this.selectedAnswer === correctAnswer) {
+                    this.handleCorrectAnswer();
+                } else {
+                    this.handleIncorrectAnswer(correctAnswer);
+                }
+                
+                this.autoAdvance();
+            }
+
+            skipQuestion() {
+                if (this.isAnswered) return;
+                
+                this.isAnswered = true;
+                clearInterval(this.timer);
+                this.handleIncorrectAnswer(this.questions[this.currentQuestionIndex].answer);
+                this.autoAdvance();
+            }
+
+            timeUp() {
+                if (this.isAnswered) return;
+                
+                this.isAnswered = true;
+                clearInterval(this.timer);
+                this.handleIncorrectAnswer(this.questions[this.currentQuestionIndex].answer);
+                this.autoAdvance();
+            }
+
+            handleCorrectAnswer() {
+                this.correctCount++;
+                this.feedback.textContent = '🎉 Chính xác! 🎉';
+                this.feedback.classList.add('correct');
+                this.correctCountElement.textContent = this.correctCount;
+                
+                // Celebration effect
+                this.createConfetti();
+            }
+
+            handleIncorrectAnswer(correctAnswer) {
+                this.incorrectCount++;
+                this.feedback.textContent = `❌ Sai rồi! Đáp án đúng là: ${correctAnswer}`;
+                this.feedback.classList.add('incorrect');
+                this.incorrectCountElement.textContent = this.incorrectCount;
+            }
+
+            autoAdvance() {
+                this.autoAdvanceTimer = setTimeout(() => {
+                    this.nextQuestion();
+                }, 2000);
+            }
+
+            nextQuestion() {
+                this.currentQuestionIndex++;
+                this.showQuestion();
+                this.startTimer();
+            }
+
+            createConfetti() {
+                const colors = ['#f093fb', '#f5576c', '#4facfe', '#00f2fe', '#43e97b', '#38f9d7'];
+                
+                for (let i = 0; i < 50; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 3 + 's';
+                    confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    
+                    this.celebration.appendChild(confetti);
+                    
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 5000);
+                }
+            }
+
+            endGame() {
+                clearInterval(this.timer);
+                clearTimeout(this.autoAdvanceTimer);
+                
+                const totalQuestions = this.correctCount + this.incorrectCount;
+                const percentage = totalQuestions > 0 ? Math.round((this.correctCount / totalQuestions) * 100) : 0;
+                
+                this.finalScore.textContent = `Điểm: ${this.correctCount}/${totalQuestions} (${percentage}%)`;
+                this.gameOver.style.display = 'flex';
+                
+                // Celebration for good score
+                if (percentage >= 70) {
+                    this.createConfetti();
+                }
+            }
+
+            restartGame() {
+                this.currentQuestionIndex = 0;
+                this.correctCount = 0;
+                this.incorrectCount = 0;
+                this.isAnswered = false;
+                this.selectedAnswer = null;
+                
+                clearInterval(this.timer);
+                clearTimeout(this.autoAdvanceTimer);
+                
+                this.correctCountElement.textContent = '0';
+                this.incorrectCountElement.textContent = '0';
+                this.gameOver.style.display = 'none';
+                
+                // Clear confetti
+                this.celebration.innerHTML = '';
+                
+                // Reshuffle questions
+                this.questions = this.generateQuestions();
+                
+                this.startGame();
+            }
+        }
+
+        // Initialize game when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new FlashcardGame();
+        });
+
+        // Prevent zoom on double tap for iOS
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // Prevent context menu on long press
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>
