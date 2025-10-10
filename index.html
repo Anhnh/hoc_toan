@@ -468,8 +468,9 @@
                     }
                 }
                 
-                // Debug: Log some questions to check
+                // Debug: Log some questions to check, especially those with 0
                 console.log('Sample questions:', questions.slice(0, 10));
+                console.log('Questions with answer 0:', questions.filter(q => q.answer === 0).slice(0, 5));
                 
                 // Trộn ngẫu nhiên các câu hỏi
                 return this.shuffleArray(questions);
@@ -647,6 +648,9 @@
                 const options = [];
                 options.push(correctAnswer);
                 
+                // Debug: Log correct answer
+                console.log('Generating options for correct answer:', correctAnswer, 'Type:', typeof correctAnswer);
+                
                 // Generate 3 wrong answers
                 while (options.length < 4) {
                     let wrongAnswer;
@@ -668,6 +672,8 @@
                     const j = Math.floor(Math.random() * (i + 1));
                     [options[i], options[j]] = [options[j], options[i]];
                 }
+                
+                console.log('Generated options:', options);
                 
                 // Update DOM - Force reset all classes and styles
                 const optionElements = this.answerOptions.querySelectorAll('.answer-option');
@@ -696,7 +702,13 @@
                 
                 // Add selection to clicked option
                 optionElement.classList.add('selected');
-                this.selectedAnswer = parseInt(optionElement.dataset.answer);
+                
+                // Parse the answer value - handle 0 correctly
+                const answerValue = optionElement.dataset.answer;
+                this.selectedAnswer = parseInt(answerValue);
+                
+                // Debug: Log selection
+                console.log('Selected answer value:', answerValue, 'Parsed:', this.selectedAnswer, 'Type:', typeof this.selectedAnswer);
                 
                 // Play select sound
                 this.playSelectSound();
@@ -735,16 +747,22 @@
             }
 
             checkAnswer() {
-                if (this.isAnswered || !this.selectedAnswer) return;
+                if (this.isAnswered || this.selectedAnswer === null || this.selectedAnswer === undefined) return;
                 
                 const currentQuestion = this.questions[this.currentQuestionIndex];
                 const correctAnswer = currentQuestion.answer;
                 
-                // Debug: Log current question and answers
+                // Debug: Log current question and answers with detailed comparison
                 console.log('Current question:', currentQuestion.question);
-                console.log('Correct answer:', correctAnswer);
-                console.log('Selected answer:', this.selectedAnswer);
-                console.log('Answer options:', Array.from(this.answerOptions.querySelectorAll('.answer-option')).map(opt => opt.dataset.answer));
+                console.log('Correct answer:', correctAnswer, 'Type:', typeof correctAnswer);
+                console.log('Selected answer:', this.selectedAnswer, 'Type:', typeof this.selectedAnswer);
+                console.log('Strict equality:', this.selectedAnswer === correctAnswer);
+                console.log('Loose equality:', this.selectedAnswer == correctAnswer);
+                console.log('Answer options:', Array.from(this.answerOptions.querySelectorAll('.answer-option')).map(opt => ({
+                    value: opt.dataset.answer,
+                    parsed: parseInt(opt.dataset.answer),
+                    type: typeof parseInt(opt.dataset.answer)
+                })));
                 
                 this.isAnswered = true;
                 clearInterval(this.timer);
@@ -759,6 +777,7 @@
                     }
                 });
                 
+                // Use strict equality for comparison
                 if (this.selectedAnswer === correctAnswer) {
                     this.handleCorrectAnswer();
                 } else {
