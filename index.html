@@ -135,9 +135,10 @@
             font-size: 24px;
             font-weight: bold;
             padding: 20px;
-            border: 3px solid #e2e8f0;
+            border: 3px solid #4a5568;
             border-radius: 15px;
-            background: white;
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
+            color: #2d3748;
             cursor: pointer;
             transition: all 0.3s ease;
             outline: none;
@@ -151,6 +152,7 @@
 
         .answer-option:hover {
             border-color: #667eea;
+            background: linear-gradient(135deg, #e6f3ff 0%, #d1e7ff 100%);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0,0,0,0.15);
         }
@@ -161,19 +163,23 @@
 
         .answer-option.selected {
             border-color: #667eea;
-            background: #e6f3ff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
         }
 
         .answer-option.correct {
             border-color: #48bb78;
-            background: #c6f6d5;
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
             animation: correctAnswer 0.5s ease;
         }
 
         .answer-option.incorrect {
             border-color: #f56565;
-            background: #fed7d7;
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+            color: white;
             animation: incorrectAnswer 0.5s ease;
         }
 
@@ -187,49 +193,6 @@
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-10px); }
             75% { transform: translateX(10px); }
-        }
-
-        .buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .btn {
-            padding: 15px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            min-width: 120px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn-check {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-            color: white;
-        }
-
-        .btn-skip {
-            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
-            color: white;
-        }
-
-        .btn-restart {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
         }
 
         .feedback {
@@ -343,6 +306,29 @@
             font-weight: bold;
         }
 
+        .btn-restart {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-restart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .btn-restart:active {
+            transform: translateY(0);
+        }
+
         @media (max-width: 768px) {
             .game-container {
                 padding: 20px;
@@ -357,16 +343,6 @@
                 font-size: 20px;
                 padding: 15px;
                 min-height: 50px;
-            }
-            
-            .buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .btn {
-                width: 100%;
-                max-width: 200px;
             }
         }
     </style>
@@ -396,14 +372,10 @@
                 <div class="answer-option" data-answer="9">9</div>
                 <div class="answer-option" data-answer="12">12</div>
             </div>
-            <div class="buttons">
-                <button class="btn btn-check" id="check-btn">Kiểm tra</button>
-                <button class="btn btn-skip" id="skip-btn">Bỏ qua</button>
-            </div>
             <div class="feedback" id="feedback"></div>
         </div>
 
-        <button class="btn btn-restart" id="restart-btn" style="display: none;">Chơi lại</button>
+        <button class="btn-restart" id="restart-btn" style="display: none;">Chơi lại</button>
     </div>
 
     <div class="celebration" id="celebration"></div>
@@ -412,7 +384,7 @@
         <div class="game-over-content">
             <h2>🎉 Hoàn thành! 🎉</h2>
             <div class="final-score" id="final-score">Điểm: 0/0</div>
-            <button class="btn btn-restart" onclick="restartGame()">Chơi lại</button>
+            <button class="btn-restart" onclick="restartGame()">Chơi lại</button>
         </div>
     </div>
 
@@ -480,8 +452,6 @@
             initializeElements() {
                 this.questionText = document.getElementById('question-text');
                 this.answerOptions = document.getElementById('answer-options');
-                this.checkBtn = document.getElementById('check-btn');
-                this.skipBtn = document.getElementById('skip-btn');
                 this.restartBtn = document.getElementById('restart-btn');
                 this.feedback = document.getElementById('feedback');
                 this.timerElement = document.getElementById('timer');
@@ -496,8 +466,6 @@
             }
 
             bindEvents() {
-                this.checkBtn.addEventListener('click', () => this.checkAnswer());
-                this.skipBtn.addEventListener('click', () => this.skipQuestion());
                 this.restartBtn.addEventListener('click', () => this.restartGame());
                 
                 // Add click events to answer options
@@ -517,8 +485,6 @@
                         if (options[optionIndex]) {
                             this.selectAnswer(options[optionIndex]);
                         }
-                    } else if (e.key === 'Enter' && this.selectedAnswer) {
-                        this.checkAnswer();
                     }
                 });
             }
@@ -600,6 +566,11 @@
                 // Add selection to clicked option
                 optionElement.classList.add('selected');
                 this.selectedAnswer = parseInt(optionElement.dataset.answer);
+                
+                // Auto check answer after selection
+                setTimeout(() => {
+                    this.checkAnswer();
+                }, 300);
             }
 
             startTimer() {
@@ -653,15 +624,6 @@
                     this.handleIncorrectAnswer(correctAnswer);
                 }
                 
-                this.autoAdvance();
-            }
-
-            skipQuestion() {
-                if (this.isAnswered) return;
-                
-                this.isAnswered = true;
-                clearInterval(this.timer);
-                this.handleIncorrectAnswer(this.questions[this.currentQuestionIndex].answer);
                 this.autoAdvance();
             }
 
