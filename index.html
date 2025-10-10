@@ -591,6 +591,23 @@
                 this.playSound(800, 0.05, 'sine');
             }
 
+            resetAnswerOptions() {
+                // Complete reset of all answer options
+                this.answerOptions.querySelectorAll('.answer-option').forEach(option => {
+                    // Reset all CSS classes
+                    option.className = 'answer-option';
+                    
+                    // Reset all inline styles
+                    option.style.cssText = '';
+                    
+                    // Force remove any remaining classes
+                    option.classList.remove('selected', 'correct', 'incorrect', 'hover', 'active');
+                    
+                    // Force reflow to ensure styles are applied
+                    option.offsetHeight;
+                });
+            }
+
             startGame() {
                 this.showQuestion();
                 this.startTimer();
@@ -605,13 +622,11 @@
                 const question = this.questions[this.currentQuestionIndex];
                 this.questionText.textContent = question.question;
                 
+                // Complete reset of answer options
+                this.resetAnswerOptions();
+                
                 // Generate answer options
                 this.generateAnswerOptions(question.answer);
-                
-                // Reset UI - Clear all answer option classes
-                this.answerOptions.querySelectorAll('.answer-option').forEach(option => {
-                    option.className = 'answer-option';
-                });
                 
                 this.feedback.textContent = '';
                 this.feedback.className = 'feedback';
@@ -654,12 +669,22 @@
                     [options[i], options[j]] = [options[j], options[i]];
                 }
                 
-                // Update DOM
+                // Update DOM - Force reset all classes and styles
                 const optionElements = this.answerOptions.querySelectorAll('.answer-option');
                 optionElements.forEach((element, index) => {
                     element.textContent = options[index];
                     element.dataset.answer = options[index];
+                    
+                    // Force reset all classes and inline styles
                     element.className = 'answer-option';
+                    element.style.borderColor = '';
+                    element.style.backgroundColor = '';
+                    element.style.color = '';
+                    element.style.transform = '';
+                    element.style.boxShadow = '';
+                    
+                    // Remove any remaining classes
+                    element.classList.remove('selected', 'correct', 'incorrect', 'hover');
                 });
             }
 
