@@ -48,31 +48,20 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            color: #2d3748; /* darker for better contrast */
+            color: #2d3748;
             font-weight: 700;
         }
 
         .category-select select {
             padding: 10px 14px;
             border-radius: 12px;
-            border: 2px solid #667eea; /* clearer border */
-            background: #ffffff; /* white background for readability */
-            color: #1a202c; /* dark text */
+            border: 2px solid #4c51bf;
+            background: #edf2f7;
+            color: #1a202c !important;
             outline: none;
             font-weight: 700;
             font-size: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .category-select select:focus {
-            border-color: #5a67d8;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-        }
-
-        .category-select option {
-            color: #1a202c;
-            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
         .score-board {
@@ -168,9 +157,10 @@
             font-size: 24px;
             font-weight: bold;
             padding: 20px;
-            border: 3px solid #e2e8f0;
+            border: 3px solid #4a5568 !important;
             border-radius: 15px;
-            background: white;
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%) !important;
+            color: #2d3748 !important;
             cursor: pointer;
             transition: all 0.3s ease;
             outline: none;
@@ -179,34 +169,40 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+            transform: scale(1) !important;
         }
 
         .answer-option:hover {
-            border-color: #667eea;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            border-color: #667eea !important;
+            background: linear-gradient(135deg, #e6f3ff 0%, #d1e7ff 100%) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15) !important;
         }
 
         .answer-option:active {
-            transform: translateY(0);
+            transform: translateY(0) !important;
         }
 
         .answer-option.selected {
-            border-color: #667eea;
-            background: #e6f3ff;
-            transform: scale(1.05);
+            border-color: #667eea !important;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            color: white !important;
+            transform: scale(1.05) !important;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3) !important;
         }
 
         .answer-option.correct {
-            border-color: #48bb78;
-            background: #c6f6d5;
+            border-color: #48bb78 !important;
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%) !important;
+            color: white !important;
             animation: correctAnswer 0.5s ease;
         }
 
         .answer-option.incorrect {
-            border-color: #f56565;
-            background: #fed7d7;
+            border-color: #f56565 !important;
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%) !important;
+            color: white !important;
             animation: incorrectAnswer 0.5s ease;
         }
 
@@ -220,49 +216,6 @@
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-10px); }
             75% { transform: translateX(10px); }
-        }
-
-        .buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .btn {
-            padding: 15px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            min-width: 120px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn-check {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-            color: white;
-        }
-
-        .btn-skip {
-            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
-            color: white;
-        }
-
-        .btn-restart {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
         }
 
         .feedback {
@@ -376,6 +329,57 @@
             font-weight: bold;
         }
 
+        .btn-restart {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-restart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .btn-restart:active {
+            transform: translateY(0);
+        }
+
+        .sound-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sound-toggle:hover { 
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .sound-toggle.muted {
+            background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);
+        }
+
         @media (max-width: 768px) {
             .game-container {
                 padding: 20px;
@@ -391,28 +395,19 @@
                 padding: 15px;
                 min-height: 50px;
             }
-            
-            .buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .btn {
-                width: 100%;
-                max-width: 200px;
-            }
         }
     </style>
 </head>
 <body>
     <div class="game-container">
+        <button class="sound-toggle" id="sound-toggle" title="Bật/Tắt âm thanh">🔊</button>
         <h1 class="game-title">🎮 Flashcard Toán Học 🎮</h1>
         <div class="category-select">
-            <span>Phân loại:</span>
-            <select id="category-select" aria-label="Chọn phân loại thử thách">
-                <option value="1">Phạm vi 10</option>
-                <option value="2" selected>Phạm vi 20</option>
-                <option value="3">Phạm vi 100</option>
+            <span>Phạm vi:</span>
+            <select id="category-select" aria-label="Chọn phạm vi">
+                <option value="1">10</option>
+                <option value="2" selected>20</option>
+                <option value="3">100</option>
             </select>
         </div>
         
@@ -437,14 +432,10 @@
                 <div class="answer-option" data-answer="9">9</div>
                 <div class="answer-option" data-answer="12">12</div>
             </div>
-            <div class="buttons">
-                <button class="btn btn-check" id="check-btn">Kiểm tra</button>
-                <button class="btn btn-skip" id="skip-btn">Bỏ qua</button>
-            </div>
             <div class="feedback" id="feedback"></div>
         </div>
 
-        <button class="btn btn-restart" id="restart-btn" style="display: none;">Chơi lại</button>
+        <button class="btn-restart" id="restart-btn" style="display: none;">Chơi lại</button>
     </div>
 
     <div class="celebration" id="celebration"></div>
@@ -453,14 +444,14 @@
         <div class="game-over-content">
             <h2>🎉 Hoàn thành! 🎉</h2>
             <div class="final-score" id="final-score">Điểm: 0/0</div>
-            <button class="btn btn-restart" onclick="restartGame()">Chơi lại</button>
+            <button class="btn-restart" onclick="restartGame()">Chơi lại</button>
         </div>
     </div>
 
     <script>
         class FlashcardGame {
             constructor() {
-                this.category = 2; // 1: <=10, 2: <=20 (logic cũ), 3: <=100
+                this.category = 2; // 1: <=10, 2: <=20 (logic hiện tại), 3: <=100
                 this.questions = this.generateQuestions();
                 this.currentQuestionIndex = 0;
                 this.correctCount = 0;
@@ -469,9 +460,12 @@
                 this.timeLeft = 10;
                 this.isAnswered = false;
                 this.autoAdvanceTimer = null;
+                this.soundEnabled = true;
+                this.audioContext = null;
                 
                 this.initializeElements();
                 this.bindEvents();
+                this.initializeAudio();
                 this.startGame();
             }
 
@@ -479,7 +473,7 @@
                 const questions = [];
                 const cat = this.category;
                 if (cat === 1) {
-                    // Phạm vi 10: cộng/trừ trong 0..10
+                    // Phạm vi 10: cộng/trừ trong 0..10 (tổng ≤ 10)
                     for (let a = 0; a <= 10; a++) {
                         for (let b = 0; b <= 10; b++) {
                             const sum = a + b;
@@ -513,7 +507,7 @@
                         }
                     }
                 } else {
-                    // Phạm vi 100: cộng/trừ trong 0..100
+                    // Phạm vi 100: cộng/trừ trong 0..100 (tổng ≤ 100)
                     for (let a = 0; a <= 100; a++) {
                         for (let b = 0; b <= 100; b++) {
                             const sum = a + b;
@@ -536,15 +530,19 @@
                 const selected = parseInt(this.categorySelect.value);
                 if (![1,2,3].includes(selected)) return;
                 this.category = selected;
+                // Fully restart game to apply new mode
+                clearInterval(this.timer);
+                clearTimeout(this.autoAdvanceTimer);
+                this.gameOver.style.display = 'none';
+                this.celebration.innerHTML = '';
+                this.feedback.textContent = '';
+                this.correctCountElement.textContent = '0';
+                this.incorrectCountElement.textContent = '0';
                 this.currentQuestionIndex = 0;
                 this.correctCount = 0;
                 this.incorrectCount = 0;
                 this.isAnswered = false;
                 this.selectedAnswer = null;
-                clearInterval(this.timer);
-                clearTimeout(this.autoAdvanceTimer);
-                this.correctCountElement.textContent = '0';
-                this.incorrectCountElement.textContent = '0';
                 this.questions = this.generateQuestions();
                 this.showQuestion();
                 this.startTimer();
@@ -562,8 +560,6 @@
             initializeElements() {
                 this.questionText = document.getElementById('question-text');
                 this.answerOptions = document.getElementById('answer-options');
-                this.checkBtn = document.getElementById('check-btn');
-                this.skipBtn = document.getElementById('skip-btn');
                 this.restartBtn = document.getElementById('restart-btn');
                 this.feedback = document.getElementById('feedback');
                 this.timerElement = document.getElementById('timer');
@@ -574,14 +570,14 @@
                 this.gameOver = document.getElementById('game-over');
                 this.finalScore = document.getElementById('final-score');
                 this.celebration = document.getElementById('celebration');
+                this.soundToggle = document.getElementById('sound-toggle');
                 this.categorySelect = document.getElementById('category-select');
                 this.selectedAnswer = null;
             }
 
             bindEvents() {
-                this.checkBtn.addEventListener('click', () => this.checkAnswer());
-                this.skipBtn.addEventListener('click', () => this.skipQuestion());
                 this.restartBtn.addEventListener('click', () => this.restartGame());
+                this.soundToggle.addEventListener('click', () => this.toggleSound());
                 this.categorySelect.addEventListener('change', () => this.changeCategory());
                 
                 // Add click events to answer options
@@ -601,9 +597,101 @@
                         if (options[optionIndex]) {
                             this.selectAnswer(options[optionIndex]);
                         }
-                    } else if (e.key === 'Enter' && this.selectedAnswer) {
-                        this.checkAnswer();
                     }
+                });
+            }
+
+            initializeAudio() {
+                try {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    console.log('Web Audio API not supported');
+                    this.soundEnabled = false;
+                    this.soundToggle.style.display = 'none';
+                }
+            }
+
+            toggleSound() {
+                this.soundEnabled = !this.soundEnabled;
+                this.soundToggle.textContent = this.soundEnabled ? '🔊' : '🔇';
+                this.soundToggle.classList.toggle('muted', !this.soundEnabled);
+                
+                if (this.soundEnabled && this.audioContext && this.audioContext.state === 'suspended') {
+                    this.audioContext.resume();
+                }
+            }
+
+            playSound(frequency, duration, type = 'sine') {
+                if (!this.soundEnabled || !this.audioContext) return;
+                
+                try {
+                    const oscillator = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
+                    oscillator.type = type;
+                    
+                    gainNode.gain.setValueAtTime(0.1, this.audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
+                    
+                    oscillator.start(this.audioContext.currentTime);
+                    oscillator.stop(this.audioContext.currentTime + duration);
+                } catch (e) {
+                    console.log('Error playing sound:', e);
+                }
+            }
+
+            playCorrectSound() {
+                // Happy ascending melody
+                this.playSound(523, 0.1, 'sine'); // C5
+                setTimeout(() => this.playSound(659, 0.1, 'sine'), 100); // E5
+                setTimeout(() => this.playSound(784, 0.2, 'sine'), 200); // G5
+            }
+
+            playIncorrectSound() {
+                // Gentle descending tone
+                this.playSound(400, 0.3, 'sawtooth');
+            }
+
+            playTimeUpSound() {
+                // Warning sound
+                this.playSound(200, 0.5, 'square');
+            }
+
+            playSelectSound() {
+                // Soft click
+                this.playSound(800, 0.05, 'sine');
+            }
+
+            resetAnswerOptions() {
+                // Complete reset of all answer options
+                this.answerOptions.querySelectorAll('.answer-option').forEach(option => {
+                    // Reset all CSS classes
+                    option.className = 'answer-option';
+                    
+                    // Force remove any remaining classes
+                    option.classList.remove('selected', 'correct', 'incorrect', 'hover', 'active');
+                    
+                    // Force reset all inline styles with !important equivalent
+                    option.style.setProperty('border-color', '#4a5568', 'important');
+                    option.style.setProperty('background', 'linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%)', 'important');
+                    option.style.setProperty('color', '#2d3748', 'important');
+                    option.style.setProperty('transform', 'scale(1)', 'important');
+                    option.style.setProperty('box-shadow', '0 4px 15px rgba(0,0,0,0.1)', 'important');
+                    
+                    // Clear any other styles
+                    option.style.cssText = option.style.cssText + 
+                        'border-color: #4a5568 !important; ' +
+                        'background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%) !important; ' +
+                        'color: #2d3748 !important; ' +
+                        'transform: scale(1) !important; ' +
+                        'box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;';
+                    
+                    // Force reflow to ensure styles are applied
+                    option.offsetHeight;
                 });
             }
 
@@ -621,14 +709,20 @@
                 const question = this.questions[this.currentQuestionIndex];
                 this.questionText.textContent = question.question;
                 
-                // Generate answer options
-                this.generateAnswerOptions(question.answer);
+                // Complete reset of answer options
+                this.resetAnswerOptions();
                 
-                // Reset UI
+                // Small delay to ensure reset is complete
+                setTimeout(() => {
+                    // Generate answer options
+                    this.generateAnswerOptions(question.answer);
+                }, 50);
+                
                 this.feedback.textContent = '';
                 this.feedback.className = 'feedback';
                 this.isAnswered = false;
                 this.selectedAnswer = null;
+                // cat 3 khó hơn -> 15s, còn lại 10s
                 this.timeLeft = this.category === 3 ? 15 : 10;
                 this.updateTimer();
                 this.updateProgress();
@@ -644,7 +738,10 @@
                 const options = [];
                 options.push(correctAnswer);
                 
-                // Generate 3 wrong answers
+                // Debug: Log correct answer
+                console.log('Generating options for correct answer:', correctAnswer, 'Type:', typeof correctAnswer);
+                
+                // Generate 3 wrong answers theo phạm vi
                 const maxVal = this.category === 1 ? 10 : (this.category === 2 ? 20 : 100);
                 while (options.length < 4) {
                     let wrongAnswer;
@@ -667,12 +764,27 @@
                     [options[i], options[j]] = [options[j], options[i]];
                 }
                 
-                // Update DOM
+                console.log('Generated options:', options);
+                
+                // Update DOM - Force reset all classes and styles
                 const optionElements = this.answerOptions.querySelectorAll('.answer-option');
                 optionElements.forEach((element, index) => {
                     element.textContent = options[index];
                     element.dataset.answer = options[index];
+                    
+                    // Force reset all classes
                     element.className = 'answer-option';
+                    element.classList.remove('selected', 'correct', 'incorrect', 'hover', 'active');
+                    
+                    // Force reset all styles with !important
+                    element.style.setProperty('border-color', '#4a5568', 'important');
+                    element.style.setProperty('background', 'linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%)', 'important');
+                    element.style.setProperty('color', '#2d3748', 'important');
+                    element.style.setProperty('transform', 'scale(1)', 'important');
+                    element.style.setProperty('box-shadow', '0 4px 15px rgba(0,0,0,0.1)', 'important');
+                    
+                    // Force reflow
+                    element.offsetHeight;
                 });
             }
 
@@ -684,7 +796,21 @@
                 
                 // Add selection to clicked option
                 optionElement.classList.add('selected');
-                this.selectedAnswer = parseInt(optionElement.dataset.answer);
+                
+                // Parse the answer value - handle 0 correctly
+                const answerValue = optionElement.dataset.answer;
+                this.selectedAnswer = parseInt(answerValue);
+                
+                // Debug: Log selection
+                console.log('Selected answer value:', answerValue, 'Parsed:', this.selectedAnswer, 'Type:', typeof this.selectedAnswer);
+                
+                // Play select sound
+                this.playSelectSound();
+                
+                // Auto check answer after selection
+                setTimeout(() => {
+                    this.checkAnswer();
+                }, 300);
             }
 
             startTimer() {
@@ -715,9 +841,22 @@
             }
 
             checkAnswer() {
-                if (this.isAnswered || !this.selectedAnswer) return;
+                if (this.isAnswered || this.selectedAnswer === null || this.selectedAnswer === undefined) return;
                 
-                const correctAnswer = this.questions[this.currentQuestionIndex].answer;
+                const currentQuestion = this.questions[this.currentQuestionIndex];
+                const correctAnswer = currentQuestion.answer;
+                
+                // Debug: Log current question and answers with detailed comparison
+                console.log('Current question:', currentQuestion.question);
+                console.log('Correct answer:', correctAnswer, 'Type:', typeof correctAnswer);
+                console.log('Selected answer:', this.selectedAnswer, 'Type:', typeof this.selectedAnswer);
+                console.log('Strict equality:', this.selectedAnswer === correctAnswer);
+                console.log('Loose equality:', this.selectedAnswer == correctAnswer);
+                console.log('Answer options:', Array.from(this.answerOptions.querySelectorAll('.answer-option')).map(opt => ({
+                    value: opt.dataset.answer,
+                    parsed: parseInt(opt.dataset.answer),
+                    type: typeof parseInt(opt.dataset.answer)
+                })));
                 
                 this.isAnswered = true;
                 clearInterval(this.timer);
@@ -732,6 +871,7 @@
                     }
                 });
                 
+                // Use strict equality for comparison
                 if (this.selectedAnswer === correctAnswer) {
                     this.handleCorrectAnswer();
                 } else {
@@ -741,20 +881,12 @@
                 this.autoAdvance();
             }
 
-            skipQuestion() {
-                if (this.isAnswered) return;
-                
-                this.isAnswered = true;
-                clearInterval(this.timer);
-                this.handleIncorrectAnswer(this.questions[this.currentQuestionIndex].answer);
-                this.autoAdvance();
-            }
-
             timeUp() {
                 if (this.isAnswered) return;
                 
                 this.isAnswered = true;
                 clearInterval(this.timer);
+                this.playTimeUpSound();
                 this.handleIncorrectAnswer(this.questions[this.currentQuestionIndex].answer);
                 this.autoAdvance();
             }
@@ -765,6 +897,9 @@
                 this.feedback.classList.add('correct');
                 this.correctCountElement.textContent = this.correctCount;
                 
+                // Play correct sound
+                this.playCorrectSound();
+                
                 // Celebration effect
                 this.createConfetti();
             }
@@ -774,6 +909,9 @@
                 this.feedback.textContent = `❌ Sai rồi! Đáp án đúng là: ${correctAnswer}`;
                 this.feedback.classList.add('incorrect');
                 this.incorrectCountElement.textContent = this.incorrectCount;
+                
+                // Play incorrect sound
+                this.playIncorrectSound();
             }
 
             autoAdvance() {
