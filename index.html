@@ -48,16 +48,31 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            color: #4a5568;
-            font-weight: bold;
+            color: #2d3748; /* darker for better contrast */
+            font-weight: 700;
         }
 
         .category-select select {
-            padding: 8px 12px;
+            padding: 10px 14px;
             border-radius: 12px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #667eea; /* clearer border */
+            background: #ffffff; /* white background for readability */
+            color: #1a202c; /* dark text */
             outline: none;
-            font-weight: bold;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .category-select select:focus {
+            border-color: #5a67d8;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .category-select option {
+            color: #1a202c;
+            background: #ffffff;
         }
 
         .score-board {
@@ -395,9 +410,9 @@
         <div class="category-select">
             <span>Phân loại:</span>
             <select id="category-select" aria-label="Chọn phân loại thử thách">
-                <option value="1">Phạm vi 10 (cộng/trừ)</option>
-                <option value="2" selected>Phạm vi 20 (logic cũ)</option>
-                <option value="3">Phạm vi 100 (cộng/trừ) - 15s</option>
+                <option value="1">Phạm vi 10</option>
+                <option value="2" selected>Phạm vi 20</option>
+                <option value="3">Phạm vi 100</option>
             </select>
         </div>
         
